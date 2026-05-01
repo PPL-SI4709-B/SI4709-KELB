@@ -64,12 +64,11 @@
         <div style="width: 1px; height: 32px; background-color: var(--color-border);"></div>
         <div class="user-profile">
             <div class="user-info">
-                <div class="user-name">Budi Santoso</div>
-                <div class="user-role" style="text-transform: none; font-weight: 500;">Pemilik Usaha</div>
+                <div class="user-name">{{ Auth::user()?->name ?? 'Pemilik Usaha' }}</div>
+                <div class="user-role" style="text-transform: none; font-weight: 500;">{{ Auth::user()?->role ?? 'UMKM' }}</div>
             </div>
             <div class="user-avatar" style="background-color: transparent;">
-                <!-- mock user photo from image 4 -->
-                <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=ef4444&color=fff&rounded=true" alt="Budi" style="border-radius: 50%;">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()?->name ?? 'Pemilik Usaha') }}&background=ef4444&color=fff&rounded=true" alt="Avatar" style="border-radius: 50%;">
             </div>
         </div>
     </div>
@@ -104,7 +103,7 @@
             </div>
             <div>
                 <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">TOTAL PENGAJUAN</div>
-                <div class="text-3xl font-bold text-gray-900 text-primary">2</div>
+                <div class="text-3xl font-bold text-gray-900 text-primary">{{ $totalPengajuan }}</div>
             </div>
         </div>
         
@@ -115,7 +114,7 @@
             </div>
             <div>
                 <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">EVENT DIIKUTI</div>
-                <div class="text-3xl font-bold text-success" style="color: var(--color-success);">1</div>
+                <div class="text-3xl font-bold text-success" style="color: var(--color-success);">{{ $eventDiikuti }}</div>
             </div>
         </div>
 
@@ -126,7 +125,7 @@
             </div>
             <div>
                 <div class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">LAPORAN TERKIRIM</div>
-                <div class="text-3xl font-bold" style="color: #9333ea;">3</div>
+                <div class="text-3xl font-bold" style="color: #9333ea;">{{ $laporanTerkirim }}</div>
             </div>
         </div>
     </div>
@@ -153,7 +152,7 @@
                     </svg>
                     <!-- Text inside -->
                     <div style="position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction:column; align-items:center; justify-content:center;">
-                        <span style="font-weight: 800; font-size: 2.5rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.1); color: var(--color-gray-900);">2</span>
+                        <span style="font-weight: 800; font-size: 2.5rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.1); color: var(--color-gray-900);">{{ $statusPengajuan['total'] }}</span>
                         <span style="font-size: 0.65rem; color: var(--color-text-muted); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">TOTAL</span>
                     </div>
                 </div>
@@ -163,15 +162,15 @@
             <div class="grid grid-cols-3 gap-0 mt-2 text-center border-t border-gray-100 pt-6">
                 <div>
                     <div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-1"><div style="width: 6px; height: 6px; background: #f59e0b; border-radius: 50%;"></div>Menunggu</div>
-                    <div class="text-xl font-bold text-gray-900">1</div>
+                    <div class="text-xl font-bold text-gray-900">{{ $statusPengajuan['menunggu'] }}</div>
                 </div>
                 <div>
                     <div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-1"><div style="width: 6px; height: 6px; background: #1e40af; border-radius: 50%;"></div>Disetujui</div>
-                    <div class="text-xl font-bold text-gray-900">1</div>
+                    <div class="text-xl font-bold text-gray-900">{{ $statusPengajuan['disetujui'] }}</div>
                 </div>
                 <div>
                     <div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-1"><div style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%;"></div>Ditolak</div>
-                    <div class="text-xl font-bold text-gray-900">0</div>
+                    <div class="text-xl font-bold text-gray-900">{{ $statusPengajuan['ditolak'] }}</div>
                 </div>
             </div>
         </div>
@@ -187,41 +186,22 @@
                 <!-- connector line -->
                 <div style="position: absolute; left: 15px; top: 15px; bottom: 15px; width: 2px; background-color: var(--color-bg); z-index: 0;"></div>
                 
-                <!-- Notif 1 -->
-                <div class="flex gap-4 relative z-10 w-full">
-                    <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background-color: var(--color-info-bg); color: var(--color-secondary); display: flex; align-items: center; justify-content: center;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                @forelse ($notifikasi as $notif)
+                    <div class="flex gap-4 relative z-10 w-full">
+                        <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background-color: var(--color-info-bg); color: var(--color-secondary); display: flex; align-items: center; justify-content: center;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-900 text-sm mb-1">{{ $notif['title'] }}</div>
+                            <p class="text-xs text-gray-500 mb-1 leading-relaxed">{{ $notif['message'] }}</p>
+                            <div class="text-xs text-gray-400 font-medium">{{ $notif['time'] }}</div>
+                        </div>
                     </div>
-                    <div>
-                        <div class="font-bold text-gray-900 text-sm mb-1">Pengajuan Dana KUR Tahap 1 Sedang Diverifikasi</div>
-                        <p class="text-xs text-gray-500 mb-1 leading-relaxed">Admin Dinas Koperasi &amp; UMKM sedang melakukan peninjauan dokumen administrasi Anda.</p>
-                        <div class="text-xs text-gray-400 font-medium">15 menit yang lalu</div>
+                @empty
+                    <div class="flex items-center justify-center h-full relative z-10" style="background: white;">
+                        <p class="text-sm text-gray-500 text-center w-full py-8">Belum ada notifikasi saat ini.</p>
                     </div>
-                </div>
-                
-                <!-- Notif 2 -->
-                <div class="flex gap-4 relative z-10 w-full">
-                    <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background-color: var(--color-success-bg); color: var(--color-success); display: flex; align-items: center; justify-content: center;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    </div>
-                    <div>
-                        <div class="font-bold text-gray-900 text-sm mb-1">Laporan Perkembangan Oktober Disetujui</div>
-                        <p class="text-xs text-gray-500 mb-1 leading-relaxed">Laporan omzet bulanan Anda telah divalidasi dan masuk ke basis data provinsi.</p>
-                        <div class="text-xs text-gray-400 font-medium">3 jam yang lalu</div>
-                    </div>
-                </div>
-
-                <!-- Notif 3 -->
-                <div class="flex gap-4 relative z-10 w-full">
-                    <div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background-color: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </div>
-                    <div>
-                        <div class="font-bold text-gray-900 text-sm mb-1">Undangan Pelatihan Pemasaran Digital</div>
-                        <p class="text-xs text-gray-500 mb-1 leading-relaxed">Terdapat pelatihan baru untuk UMKM sektor kuliner di Balai Desa Soreang besok.</p>
-                        <div class="text-xs text-gray-400 font-medium">Kemarin, 09:30</div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </div>
@@ -252,36 +232,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="font-bold text-gray-900">Oktober 2023</td>
-                        <td class="text-gray-600">Peningkatan produksi kerajinan anyaman</td>
-                        <td class="font-bold text-gray-900">Rp 12.500.000</td>
-                        <td style="text-align: right;">
-                            <span style="display:inline-flex; align-items:center; background-color: var(--color-success-bg); color: var(--color-success); font-size: 0.65rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; letter-spacing: 0.05em; text-transform: uppercase;">
-                                + SANGAT BAIK
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold text-gray-900">September 2023</td>
-                        <td class="text-gray-600">Fokus pada perluasan pasar online</td>
-                        <td class="font-bold text-gray-900">Rp 10.200.000</td>
-                        <td style="text-align: right;">
-                            <span style="display:inline-flex; align-items:center; background-color: var(--color-info-bg); color: var(--color-secondary); font-size: 0.65rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; letter-spacing: 0.05em; text-transform: uppercase;">
-                                + TERVALIDASI
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold text-gray-900">Agustus 2023</td>
-                        <td class="text-gray-600">Restrukturisasi tim operasional</td>
-                        <td class="font-bold text-gray-900">Rp 8.900.000</td>
-                        <td style="text-align: right;">
-                            <span style="display:inline-flex; align-items:center; background-color: var(--color-info-bg); color: var(--color-secondary); font-size: 0.65rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; letter-spacing: 0.05em; text-transform: uppercase;">
-                                + TERVALIDASI
-                            </span>
-                        </td>
-                    </tr>
+                    @forelse ($laporanTerakhir as $laporan)
+                        <tr>
+                            <td class="font-bold text-gray-900">{{ $laporan['periode'] }}</td>
+                            <td class="text-gray-600">{{ $laporan['deskripsi'] }}</td>
+                            <td class="font-bold text-gray-900">{{ $laporan['omzet'] }}</td>
+                            <td style="text-align: right;">
+                                <span style="display:inline-flex; align-items:center; background-color: {{ $laporan['status_bg'] }}; color: {{ $laporan['status_color'] }}; font-size: 0.65rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: 99px; letter-spacing: 0.05em; text-transform: uppercase;">
+                                    + {{ $laporan['status'] }}
+                                </span>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center py-8">
+                                <p class="text-sm text-gray-500 mb-3">Belum ada data laporan perkembangan.</p>
+                                <a href="#" class="btn" style="background-color: var(--color-primary); color: white; padding: 0.5rem 1rem; font-size: 0.875rem; border-radius: var(--radius-md);">Buat Laporan Pertama</a>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
             

@@ -80,11 +80,11 @@
         <div style="width: 1px; height: 32px; background-color: var(--color-border);"></div>
         <div class="user-profile">
             <div class="user-info">
-                <div class="user-name">Siti Rahayu</div>
-                <div class="user-role">PETUGAS DINAS</div>
+                <div class="user-name">{{ Auth::user()?->name ?? 'Petugas Dinas' }}</div>
+                <div class="user-role">{{ Auth::user()?->role ?? 'PETUGAS DINAS' }}</div>
             </div>
             <div class="user-avatar">
-                <img src="https://ui-avatars.com/api/?name=Siti+Rahayu&background=2563eb&color=fff" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()?->name ?? 'Petugas') }}&background=2563eb&color=fff" alt="Avatar">
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@
                 <div class="badge" style="background-color: var(--color-blue-100); color: var(--color-secondary);">+12%</div>
             </div>
             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">TOTAL UMKM TERDAFTAR</div>
-            <div class="text-3xl font-bold text-gray-900">248</div>
+            <div class="text-3xl font-bold text-gray-900">{{ $totalUmkm }}</div>
         </div>
         
         <!-- Card 2 -->
@@ -117,7 +117,7 @@
                 <div class="badge" style="background-color: var(--color-success-bg); color: var(--color-success);">Stabil</div>
             </div>
             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">UMKM TERVERIFIKASI</div>
-            <div class="text-3xl font-bold text-gray-900">195</div>
+            <div class="text-3xl font-bold text-gray-900">{{ $umkmTerverifikasi }}</div>
         </div>
 
         <!-- Card 3 -->
@@ -129,7 +129,7 @@
                 <div class="badge" style="background-color: #ffedd5; color: #c2410c;">Urgent</div>
             </div>
             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">PENGAJUAN MASUK</div>
-            <div class="text-3xl font-bold text-gray-900">12</div>
+            <div class="text-3xl font-bold text-gray-900">{{ $pengajuanMasuk }}</div>
         </div>
 
         <!-- Card 4 -->
@@ -141,7 +141,7 @@
                 <div class="badge" style="background-color: #f3e8ff; color: #7e22ce;">Bulan Ini</div>
             </div>
             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">EVENT AKTIF</div>
-            <div class="text-3xl font-bold text-gray-900">3</div>
+            <div class="text-3xl font-bold text-gray-900">{{ $eventAktif }}</div>
         </div>
     </div>
 
@@ -163,66 +163,19 @@
             </div>
 
             <div class="flex flex-col gap-5 mt-2">
-                <!-- Bar 1 -->
-                <div>
-                    <div class="flex justify-between text-sm mb-2 font-medium">
-                        <span class="text-gray-800">Soreang</span>
-                        <span class="text-color-primary" style="color: var(--color-secondary);">84 Unit</span>
+                @forelse ($distribusiKecamatan as $kecamatan)
+                    <div>
+                        <div class="flex justify-between text-sm mb-2 font-medium">
+                            <span class="text-gray-800">{{ $kecamatan['nama'] }}</span>
+                            <span class="text-color-primary" style="color: var(--color-secondary);">{{ $kecamatan['jumlah'] }} Unit</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height: 0.6rem; background-color: #f1f5f9;">
+                            <div class="progress-bar-fill" style="width: {{ $kecamatan['persentase'] }}%; border-radius: var(--radius-full);"></div>
+                        </div>
                     </div>
-                    <div class="progress-bar-bg" style="height: 0.6rem; background-color: #f1f5f9;">
-                        <div class="progress-bar-fill" style="width: 84%; border-radius: var(--radius-full);"></div>
-                    </div>
-                </div>
-                <!-- Bar 2 -->
-                <div>
-                    <div class="flex justify-between text-sm mb-2 font-medium">
-                        <span class="text-gray-800">Ciwidey</span>
-                        <span class="text-color-primary" style="color: var(--color-secondary);">62 Unit</span>
-                    </div>
-                    <div class="progress-bar-bg" style="height: 0.6rem; background-color: #f1f5f9;">
-                        <div class="progress-bar-fill" style="width: 62%; border-radius: var(--radius-full);"></div>
-                    </div>
-                </div>
-                <!-- Bar 3 -->
-                <div>
-                    <div class="flex justify-between text-sm mb-2 font-medium">
-                        <span class="text-gray-800">Margahayu</span>
-                        <span class="text-color-primary" style="color: var(--color-secondary);">48 Unit</span>
-                    </div>
-                    <div class="progress-bar-bg" style="height: 0.6rem; background-color: #f1f5f9;">
-                        <div class="progress-bar-fill" style="width: 48%; border-radius: var(--radius-full);"></div>
-                    </div>
-                </div>
-                <!-- Bar 4 -->
-                <div>
-                    <div class="flex justify-between text-sm mb-2 font-medium">
-                        <span class="text-gray-800">Baleendah</span>
-                        <span class="text-color-primary" style="color: var(--color-secondary);">42 Unit</span>
-                    </div>
-                    <div class="progress-bar-bg" style="height: 0.6rem; background-color: #f1f5f9;">
-                        <div class="progress-bar-fill" style="width: 42%; border-radius: var(--radius-full);"></div>
-                    </div>
-                </div>
-                <!-- Bar 5 -->
-                <div>
-                    <div class="flex justify-between text-sm mb-2 font-medium">
-                        <span class="text-gray-800">Dayeuhkolot</span>
-                        <span class="text-color-primary" style="color: var(--color-secondary);">35 Unit</span>
-                    </div>
-                    <div class="progress-bar-bg" style="height: 0.6rem; background-color: #f1f5f9;">
-                        <div class="progress-bar-fill" style="width: 35%; border-radius: var(--radius-full);"></div>
-                    </div>
-                </div>
-                <!-- Bar 6 -->
-                <div>
-                    <div class="flex justify-between text-sm mb-2 font-medium">
-                        <span class="text-gray-800">Majalaya</span>
-                        <span class="text-color-primary" style="color: var(--color-secondary);">29 Unit</span>
-                    </div>
-                    <div class="progress-bar-bg" style="height: 0.6rem; background-color: #f1f5f9;">
-                        <div class="progress-bar-fill" style="width: 29%; border-radius: var(--radius-full);"></div>
-                    </div>
-                </div>
+                @empty
+                    <div class="py-8 text-center text-gray-500 text-sm">Belum ada data distribusi UMKM.</div>
+                @endforelse
             </div>
         </div>
 
@@ -292,86 +245,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <div class="flex items-center gap-3">
-                                <div style="width: 28px; height: 28px; background: #bfdbfe; color: #1e40af; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">KL</div>
-                                <span class="font-bold text-gray-900">Kopi Luwak Ciwidey</span>
-                            </div>
-                        </td>
-                        <td class="text-gray-600">Sertifikasi Halal</td>
-                        <td class="text-gray-600">24 Okt 2023</td>
-                        <td><span class="badge badge-pending">Menunggu</span></td>
-                        <td style="text-align: right;">
-                            <button class="text-color-primary" style="color: var(--color-secondary);" onclick="document.getElementById('detail-modal').classList.add('open'); document.getElementById('modal-overlay').classList.add('open');">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="flex items-center gap-3">
-                                <div style="width: 28px; height: 28px; background: #e0e7ff; color: #3730a3; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">KS</div>
-                                <span class="font-bold text-gray-900">Keripik Pedas Soreang</span>
-                            </div>
-                        </td>
-                        <td class="text-gray-600">Bantuan Modal Usaha</td>
-                        <td class="text-gray-600">23 Okt 2023</td>
-                        <td><span class="badge badge-process">Dalam Proses</span></td>
-                        <td style="text-align: right;">
-                            <button class="text-color-primary" style="color: var(--color-secondary);">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="flex items-center gap-3">
-                                <div style="width: 28px; height: 28px; background: #dcfce7; color: #166534; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">AT</div>
-                                <span class="font-bold text-gray-900">Batik Tenun Baleendah</span>
-                            </div>
-                        </td>
-                        <td class="text-gray-600">Pelatihan Digital Marketing</td>
-                        <td class="text-gray-600">22 Okt 2023</td>
-                        <td><span class="badge badge-approved">Disetujui</span></td>
-                        <td style="text-align: right;">
-                            <button class="text-color-primary" style="color: var(--color-secondary);">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="flex items-center gap-3">
-                                <div style="width: 28px; height: 28px; background: #fee2e2; color: #991b1b; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">SM</div>
-                                <span class="font-bold text-gray-900">Sepatu Majalaya Craft</span>
-                            </div>
-                        </td>
-                        <td class="text-gray-600">Pameran UMKM Nasional</td>
-                        <td class="text-gray-600">21 Okt 2023</td>
-                        <td><span class="badge badge-rejected">Ditolak</span></td>
-                        <td style="text-align: right;">
-                            <button class="text-color-primary" style="color: var(--color-secondary);">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="flex items-center gap-3">
-                                <div style="width: 28px; height: 28px; background: #bfdbfe; color: #1e40af; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">SR</div>
-                                <span class="font-bold text-gray-900">Susu Sapi Rancabali</span>
-                            </div>
-                        </td>
-                        <td class="text-gray-600">Sertifikasi Halal</td>
-                        <td class="text-gray-600">20 Okt 2023</td>
-                        <td><span class="badge badge-pending">Menunggu</span></td>
-                        <td style="text-align: right;">
-                            <button class="text-color-primary" style="color: var(--color-secondary);">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </button>
-                        </td>
-                    </tr>
+                    @forelse ($pengajuanTerbaru as $pengajuan)
+                        <tr>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div style="width: 28px; height: 28px; background: {{ $pengajuan['icon_bg'] }}; color: {{ $pengajuan['icon_color'] }}; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">{{ $pengajuan['inisial'] }}</div>
+                                    <span class="font-bold text-gray-900">{{ $pengajuan['nama_umkm'] }}</span>
+                                </div>
+                            </td>
+                            <td class="text-gray-600">{{ $pengajuan['program'] }}</td>
+                            <td class="text-gray-600">{{ $pengajuan['tanggal'] }}</td>
+                            <td><span class="badge {{ $pengajuan['badge_class'] }}">{{ $pengajuan['status'] }}</span></td>
+                            <td style="text-align: right;">
+                                <button class="text-color-primary hover:bg-gray-100 p-1 rounded-full transition-colors" style="color: var(--color-secondary);" onclick="document.getElementById('detail-modal').classList.add('open'); document.getElementById('modal-overlay').classList.add('open');">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-8">
+                                <p class="text-sm text-gray-500">Belum ada pengajuan terbaru.</p>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
             

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +25,7 @@ Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dinas routes
-Route::get('/dinas/dashboard', function () {
-    return view('dinas.dashboard');
-})->name('dinas.dashboard');
+Route::get('/dinas/dashboard', [DashboardController::class, 'dinas'])->name('dinas.dashboard');
 
 // UMKM Auth / Register flow
 Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
@@ -42,10 +41,7 @@ Route::prefix('umkm/register')->name('umkm.register.')->group(function () {
 
 // UMKM General Routes (Dummy Protected)
 Route::prefix('umkm')->group(function () {
-    Route::get('/dashboard', function () {
-        if (!session()->has('is_logged_in')) return redirect()->route('login');
-        return view('umkm.dashboard');
-    })->name('umkm.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'umkm'])->name('umkm.dashboard');
 
     Route::get('/event', function () {
         if (!session()->has('is_logged_in')) return redirect()->route('login');
